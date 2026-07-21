@@ -127,6 +127,9 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../config-typescript
+      '@types/node':
+        specifier: ^20.11.24
+        version: 20.19.43
       '@types/pg':
         specifier: ^8.16.0
         version: 8.20.0

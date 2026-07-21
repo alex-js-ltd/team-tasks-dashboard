@@ -1,12 +1,10 @@
 "use client";
 
 import { useOptimistic, useTransition } from "react";
-
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import {
   SelectContent,
-  SelectIcon,
   SelectItem,
   SelectItemIndicator,
   SelectItemText,

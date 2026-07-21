@@ -21,10 +21,17 @@ export const select = {
 export async function getTasks(status: Status | null) {
   return prisma.task.findMany({
     where: status ? { status } : undefined,
-    select,
-    orderBy: {
-      updatedAt: "desc",
+    include: {
+      assignee: true,
     },
+    orderBy: [
+      {
+        createdAt: "desc",
+      },
+      {
+        id: "asc",
+      },
+    ],
   });
 }
 

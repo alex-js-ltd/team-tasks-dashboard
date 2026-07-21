@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
 }
 
 generator client {
@@ -15,4 +15,29 @@ model User {
   name          String?
   email         String?   @unique
   emailVerified DateTime?
+
+  tasks       Task[]
+}
+
+enum Status {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+model Task {
+  id      String @id @default(cuid())
+  title   String
+  status  Status @default(TODO)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  assignee   User   @relation(fields: [assigneeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  assigneeId String
+
+  // non-unique foreign key
+  @@index([assigneeId])
+  // This helps our order by in the user search a LOT
+  @@index([assigneeId, updatedAt])
 }

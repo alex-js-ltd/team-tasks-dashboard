@@ -1,27 +1,7 @@
-import { PrismaPg } from '@prisma/adapter-pg';
-import { Pool } from 'pg'; // Import the Pool
+import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 import { PrismaClient } from "../generated/client";
 
-const globalForPrisma = global as unknown as { prisma: PrismaClient };
-
-// 1. Create the Pool specifically for the adapter
-const connectionString = process.env.DATABASE_URL;
-
-const pool = new Pool({
-  connectionString
-});
-
-// 2. Pass the pool to the adapter
-const adapter = new PrismaPg(pool);
-
-export const prisma =
-  globalForPrisma.prisma ||
-  new PrismaClient({
-    adapter,
-    // Optional: Log queries to see if connection works
-    // log: ['query', 'info', 'warn', 'error'],
-  });
-
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+const adapter = new PrismaBetterSqlite3({ url: "file:./dev.db" });
+export const prisma = new PrismaClient({ adapter });
 
 export * from "../generated/client";

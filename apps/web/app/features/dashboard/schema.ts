@@ -7,3 +7,12 @@ export const UpdateTaskStatusInput = z.object({
     error: "Select a valid task status",
   }),
 });
+
+export const SearchParamsSchema = z.object({
+  status: z
+    .union([z.enum(Status)])
+    .nullable()
+    .default(null),
+});
+
+export type SearchParams = z.infer<typeof SearchParamsSchema>;

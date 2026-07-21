@@ -18,7 +18,7 @@ export const select = {
   },
 } satisfies Prisma.TaskSelect;
 
-export async function getTasks(status?: Status) {
+export async function getTasks(status: Status | null) {
   return prisma.task.findMany({
     where: status ? { status } : undefined,
     select,

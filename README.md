@@ -1,7 +1,3 @@
-# Turborepo + Prisma ORM starter
-
-This is a example designed to help you quickly set up a Turborepo monorepo with a Next.js app and Prisma ORM. This is a community-maintained example. If you experience a problem, please submit a pull request with a fix. GitHub Issues will be closed.
-
 ## What's inside?
 
 This turborepo includes the following packages/apps:
@@ -23,7 +19,6 @@ This turborepo has some additional tools already setup for you:
 - [ESLint](https://eslint.org/) for code linting
 - [Prettier](https://prettier.io) for code formatting
 - [Prisma ORM](https://prisma.io/) for accessing the database
-- [Docker Compose](https://docs.docker.com/compose/) for a local MySQL database
 
 ## Getting started
 
@@ -45,17 +40,9 @@ Navigate to your project directory:
 cd ./my-turborepo
 ```
 
-### 2. Setup a local database with Docker Compose
+### 2. Setup a local database with SQLite
 
-We use [Prisma ORM](https://prisma.io/) to manage and access our database. As such you will need a database for this project, either locally or hosted in the cloud.
-
-To make this process easier, a [`docker-compose.yml` file](./docker-compose.yml) is included to setup a PostgreSQL server locally with a new database named `turborepo`:
-
-Start the PostgreSQL database using Docker Compose:
-
-```sh
-docker-compose up -d
-```
+The SQLite database file is included with this project, so the application can also be started using the existing data.
 
 To change the default database name, update the `POSTGRES_DB` environment variable in the [`docker-compose.yml` file](/docker-compose.yml).
 
@@ -197,4 +184,5 @@ Learn more about the power of Turborepo:
 - [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
 - [Configuration Options](https://turborepo.dev/docs/reference/configuration)
 - [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
+
 # team-tasks-dashboard

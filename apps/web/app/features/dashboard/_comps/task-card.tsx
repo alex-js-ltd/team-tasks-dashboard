@@ -53,10 +53,11 @@ function formatDate(date: Date | string) {
 function StatusBadge({ status }: { status: TaskRow["status"] }) {
   return (
     <span
+      data-testid="task-status"
+      data-status={status}
       className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium ${statusStyles[status]}`}
     >
       <span className={`h-1.5 w-1.5 rounded-full ${statusDotStyles[status]}`} />
-
       {statusLabels[status]}
     </span>
   );
@@ -66,7 +67,10 @@ export function TaskCard({ task }: { task: TaskRow }) {
   const assigneeName = task.assignee.name ?? "Unnamed user";
   const [isPending, startTransition] = useTransition();
   return (
-    <article className="group flex min-h-56 flex-col rounded-2xl border border-zinc-800/80 bg-zinc-950 p-5 shadow-lg shadow-black/10 transition duration-200 hover:border-zinc-700 hover:bg-zinc-900/70 hover:shadow-2xl hover:shadow-black/20">
+    <article
+      className="group flex min-h-56 flex-col rounded-2xl border border-zinc-800/80 bg-zinc-950 p-5 shadow-lg shadow-black/10 transition duration-200 hover:border-zinc-700 hover:bg-zinc-900/70 hover:shadow-2xl hover:shadow-black/20"
+      data-testid="task-card"
+    >
       <div className="flex items-start justify-between gap-4">
         <StatusBadge status={task.status} />
 

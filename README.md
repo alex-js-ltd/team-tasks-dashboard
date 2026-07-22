@@ -1,188 +1,112 @@
-## What's inside?
+# Task Dashboard
 
-This turborepo includes the following packages/apps:
+A small task-management dashboard built as a Turborepo. Users can view tasks, filter them by status, and update the status of individual tasks.
 
-### Apps and packages
+## Features
 
-- `web`: a [Next.js](https://nextjs.org/) app
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/database`: [Prisma ORM](https://prisma.io/) to manage & access your database
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- View tasks assigned to team members
+- Filter tasks by status
+- Update a task's status
+- Responsive layout for desktop and tablet
+- Local SQLite database with pre-populated development data
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+## Tech Stack
 
-### Utilities
+- Next.js
+- React
+- TypeScript
+- Turborepo
+- pnpm
+- Prisma
+- SQLite
+- Playwright
+- Tailwind CSS
 
-This turborepo has some additional tools already setup for you:
+## Project Structure
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-- [Prisma ORM](https://prisma.io/) for accessing the database
-
-## Getting started
-
-Follow these steps to set up and run your Turborepo project with Prisma ORM:
-
-### 1. Create a Turborepo project
-
-Start by creating a new Turborepo project using the following command:
-
-```sh
-npx create-turbo@latest -e with-prisma
+```text
+.
+├── apps/
+│   └── web/                  # Next.js application
+├── packages/
+│   ├── config-eslint/        # Shared ESLint configuration
+│   ├── config-typescript/    # Shared TypeScript configuration
+│   └── database/             # Prisma schema, seed script, and SQLite database
+├── package.json
+├── pnpm-workspace.yaml
+└── turbo.json
 ```
 
-Choose your desired package manager when prompted and a name for the app (e.g., `my-turborepo`). This will scaffold a new Turborepo project with Prisma ORM included and dependencies installed.
+## Getting Started
 
-Navigate to your project directory:
+### 1. Install dependencies
+
+From the root directory, run:
 
 ```bash
-cd ./my-turborepo
+pnpm install
 ```
 
-### 2. Setup a local database with SQLite
+### 2. Start the application
 
-The SQLite database file is included with this project, so the application can also be started using the existing data.
-
-To change the default database name, update the `POSTGRES_DB` environment variable in the [`docker-compose.yml` file](/docker-compose.yml).
-
-### 3. Setup environment variables
-
-Once the database is ready, copy the `.env.example` file to the [`/packages/database`](./packages/database/) and [`/apps/web`](./apps/web/) directories as `.env`:
-
-```bash
-cp .env.example ./packages/database/.env
-cp .env.example ./apps/web/.env
-```
-
-This ensures Prisma has access to the `DATABASE_URL` environment variable, which is required to connect to your database.
-
-If you added a custom database name, or use a cloud based database, you will need to update the `DATABASE_URL` in your `.env` accordingly.
-
-### 4. Migrate your database
-
-Once your database is running, you’ll need to create and apply migrations to set up the necessary tables. Run the database migration command:
-
-```bash
-# Using pnpm
-pnpm run db:migrate:dev
-```
-
-<details>
-
-<summary>Expand for <code>yarn</code>, <code>pnpm</code> or <code>bun</code></summary>
-
-```bash
-# Using pnpm
-pnpm run db:migrate:dev
-
-# Using pnpm
-pnpm run db:migrate:dev
-
-# Using pnpm
-pnpm run db:migrate:dev
-```
-
-</details>
-
-You’ll be prompted to name the migration. Once you provide a name, Prisma will create and apply the migration to your database.
-
-> Note: The `db:migrate:dev` script (located in [packages/database/package.json](/packages/database/package.json)) uses [Prisma Migrate](https://www.prisma.io/migrate) under the hood.
-
-For production environments, always push schema changes to your database using the [`prisma migrate deploy` command](https://www.prisma.io/docs/orm/prisma-client/deployment/deploy-database-changes-with-prisma-migrate). You can find an example `db:migrate:deploy` script in the [`package.json` file](/packages/database/package.json) of the `database` package.
-
-### 5. Seed your database
-
-To populate your database with initial or fake data, use [Prisma's seeding functionality](https://www.prisma.io/docs/guides/database/seed-database).
-
-Update the seed script located at [`packages/database/src/seed.ts`](/packages/database/src/seed.ts) to include any additional data that you want to seed. Once edited, run the seed command:
-
-```bash
-# Using pnpm
-pnpm run db:seed
-```
-
-<details>
-
-<summary>Expand for <code>yarn</code>, <code>pnpm</code> or <code>bun</code></summary>
-
-```bash
-# Using pnpm
-pnpm run db:seed
-
-# Using pnpm
-pnpm run db:seed
-
-# Using pnpm
-pnpm run db:seed
-```
-
-</details>
-
-### 6. Build your application
-
-To build all apps and packages in the monorepo, run:
-
-```bash
-# Using pnpm
-pnpm run build
-```
-
-<details>
-
-<summary>Expand for <code>yarn</code>, <code>pnpm</code> or <code>bun</code></summary>
-
-```bash
-# Using pnpm
-pnpm run build
-
-# Using pnpm
-pnpm run build
-
-# Using pnpm
-pnpm run build
-```
-
-</details>
-
-### 7. Start the application
-
-Finally, start your application with:
+Still in the root directory, run:
 
 ```bash
 pnpm run dev
 ```
 
-<details>
+This starts the development server for the web application.
 
-<summary>Expand for <code>yarn</code>, <code>pnpm</code> or <code>bun</code></summary>
+## Database
+
+The database package is located at:
+
+```text
+packages/database
+```
+
+It contains the local SQLite database file:
+
+```text
+dev.db
+```
+
+The database has already been populated with sample users and tasks, so no additional database setup or seeding is required to run the project.
+
+## Optional: Reseed the Database
+
+The seed script uses the OpenAI API through:
+
+```json
+"@ai-sdk/openai": "^4.0.17"
+```
+
+To generate new seed data, make sure an OpenAI API key is available in your environment:
+
+```env
+OPENAI_API_KEY="your-api-key"
+```
+
+Then move into the database package and run:
 
 ```bash
-# Using pnpm
-pnpm run dev
+cd packages/database
+pnpm db:seed
+```
 
-# Using pnpm
-pnpm run dev
+Seeding is optional because the included SQLite database is already populated and ready to use.
 
-# Using pnpm
+## Useful Commands
+
+Run these commands from the root directory:
+
+```bash
+pnpm install
 pnpm run dev
 ```
 
-</details>
+Run the optional seed command from `packages/database`:
 
-Your app will be running at `http://localhost:3000`. Open it in your browser to see it in action!
-
-You can also read the official [detailed step-by-step guide from Prisma ORM](https://pris.ly/guide/turborepo?utm_campaign=turborepo-example) to build a project from scratch using Turborepo and Prisma ORM.
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
-
-# team-tasks-dashboard
+```bash
+pnpm db:seed
+```

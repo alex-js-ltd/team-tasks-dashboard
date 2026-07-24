@@ -23,7 +23,7 @@ export default async function IndexPage(props: Props) {
     notFound();
   }
 
-  const taskListPromise = getTasks(submission.data.status);
+  const taskPagePromise = getTasks(submission.data.status, null);
 
   return (
     <main className="min-h-screen bg-black px-4 py-8 text-white sm:px-6 lg:px-8">
@@ -31,7 +31,10 @@ export default async function IndexPage(props: Props) {
         <StatusFilter />
 
         <Suspense fallback={<TaskListFallback />}>
-          <TaskList taskListPromise={taskListPromise} />
+          <TaskList
+            taskPagePromise={taskPagePromise}
+            status={submission.data.status}
+          />
         </Suspense>
       </div>
     </main>

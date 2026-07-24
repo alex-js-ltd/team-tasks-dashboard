@@ -3,32 +3,22 @@
 import { use, useState, useEffect } from "react";
 import { TaskCard } from "./task-card";
 import { type TaskPage } from "../data";
-import { useInView } from "react-intersection-observer";
+
 import { Status } from "@repo/database";
+import { InView } from "react-intersection-observer";
 
 export function TaskList({
   taskPagePromise,
+  status,
 }: {
   taskPagePromise: Promise<TaskPage>;
+  status: Status | null;
 }) {
   const initial = use(taskPagePromise);
 
   const [pages, setPages] = useState(initial);
 
-  const { data } = pages;
-
-  const { ref, inView, entry } = useInView({
-    /* Optional options */
-    threshold: 0,
-  });
-
-  useEffect(() => {
-    if (!inView) {
-      return;
-    }
-  }, [inView]);
-
-  if (data.length === 0) {
+  if (pages.data.length === 0) {
     return (
       <div className="rounded-2xl border border-zinc-800 bg-zinc-950 px-6 py-16 text-center">
         <p className="text-sm font-medium text-zinc-200">No tasks found</p>
@@ -40,11 +30,34 @@ export function TaskList({
     );
   }
 
+  console.log(pages);
+
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-      {data.map((task) => (
-        <TaskCard key={task.id} task={task} />
-      ))}
+    <div>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        {pages.data.map((task) => (
+          <TaskCard key={task.id} task={task} />
+        ))}
+      </div>
+
+      {/* <InView
+        as="div"
+        initialInView={false}
+        onChange={async (inView) => {
+          if (!inView || !pages.nextCursorId) {
+            return;
+          }
+
+          const res = await fetchNextPage(pages.nextCursorId, status);
+
+          setPages((prev) => ({
+            nextCursorId: res.nextCursorId,
+            data: [...prev.data, ...res.data],
+          }));
+        }}
+      >
+        {({ ref }) => <div ref={ref} className="h-4" aria-hidden="true" />}
+      </InView> */}
     </div>
   );
 }
@@ -58,7 +71,7 @@ async function fetchNextPage(cursorId: string, status: Status | null) {
     searchParams.set("status", status);
   }
 
-  const res = await fetch(`/features/dashboard/api?${searchParams}`);
+  const res = await fetch(`/features/dashboard?${searchParams}`);
 
   if (!res.ok) {
     throw new Error(`${res.status}`);

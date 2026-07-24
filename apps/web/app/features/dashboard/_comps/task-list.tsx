@@ -1,17 +1,19 @@
 "use client";
 
 import { use } from "react";
-import type { TaskRow } from "../data";
 import { TaskCard } from "./task-card";
+import { type TaskPage } from "../data";
 
 export function TaskList({
   taskListPromise,
 }: {
-  taskListPromise: Promise<TaskRow[]>;
+  taskListPromise: Promise<TaskPage>;
 }) {
   const taskList = use(taskListPromise);
 
-  if (taskList.length === 0) {
+  const { data } = taskList;
+
+  if (data.length === 0) {
     return (
       <div className="rounded-2xl border border-zinc-800 bg-zinc-950 px-6 py-16 text-center">
         <p className="text-sm font-medium text-zinc-200">No tasks found</p>
@@ -25,7 +27,7 @@ export function TaskList({
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-      {taskList.map((task) => (
+      {data.map((task) => (
         <TaskCard key={task.id} task={task} />
       ))}
     </div>

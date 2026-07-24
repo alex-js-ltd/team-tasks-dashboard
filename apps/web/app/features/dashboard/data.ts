@@ -18,12 +18,31 @@ export const select = {
   },
 } satisfies Prisma.TaskSelect;
 
-export async function getTasks(status: Status | null) {
-  return prisma.task.findMany({
+export type TaskPage = {
+  data: Prisma.TaskGetPayload<{ select: typeof select }>[];
+  nextCursorId: string | null;
+};
+
+const PAGE_SIZE = 12;
+
+export async function getTasks(
+  status: Status | null,
+  cursorId: string | null,
+): Promise<TaskPage> {
+  const results = await prisma.task.findMany({
+    take: PAGE_SIZE + 1,
+    skip: cursorId ? 1 : 0,
+
+    cursor: cursorId
+      ? {
+          id: cursorId,
+        }
+      : undefined,
+
     where: status ? { status } : undefined,
-    include: {
-      assignee: true,
-    },
+
+    select,
+
     orderBy: [
       {
         createdAt: "desc",
@@ -33,6 +52,14 @@ export async function getTasks(status: Status | null) {
       },
     ],
   });
-}
 
-export type TaskRow = Prisma.TaskGetPayload<{ select: typeof select }>;
+  const hasNextPage = results.length > PAGE_SIZE;
+  const data = results.slice(0, PAGE_SIZE);
+
+  const nextCursorId = hasNextPage ? data.at(-1)!.id : null;
+
+  return {
+    data,
+    nextCursorId,
+  };
+}

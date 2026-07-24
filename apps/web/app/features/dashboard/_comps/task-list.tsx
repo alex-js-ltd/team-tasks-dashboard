@@ -40,9 +40,9 @@ export function TaskList({
         ))}
       </div>
 
-      {/* <InView
+      <InView
         as="div"
-        initialInView={false}
+
         onChange={async (inView) => {
           if (!inView || !pages.nextCursorId) {
             return;
@@ -55,9 +55,7 @@ export function TaskList({
             data: [...prev.data, ...res.data],
           }));
         }}
-      >
-        {({ ref }) => <div ref={ref} className="h-4" aria-hidden="true" />}
-      </InView> */}
+      ></InView>
     </div>
   );
 }

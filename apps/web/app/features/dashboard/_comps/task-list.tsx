@@ -1,6 +1,6 @@
 "use client";
 
-import { use } from "react";
+import { use, useState } from "react";
 import { TaskCard } from "./task-card";
 import { type TaskPage } from "../data";
 
@@ -9,9 +9,11 @@ export function TaskList({
 }: {
   taskListPromise: Promise<TaskPage>;
 }) {
-  const taskList = use(taskListPromise);
+  const initial = use(taskListPromise);
 
-  const { data } = taskList;
+  const [pages, setPages] = useState(initial);
+
+  const { data } = pages;
 
   if (data.length === 0) {
     return (

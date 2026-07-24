@@ -18,8 +18,10 @@ export const select = {
   },
 } satisfies Prisma.TaskSelect;
 
+export type TaskRow = Prisma.TaskGetPayload<{ select: typeof select }>;
+
 export type TaskPage = {
-  data: Prisma.TaskGetPayload<{ select: typeof select }>[];
+  data: TaskRow[];
   nextCursorId: string | null;
 };
 

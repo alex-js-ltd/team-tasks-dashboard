@@ -1,19 +1,32 @@
 "use client";
 
-import { use, useState } from "react";
+import { use, useState, useEffect } from "react";
 import { TaskCard } from "./task-card";
 import { type TaskPage } from "../data";
+import { useInView } from "react-intersection-observer";
+import { Status } from "@repo/database";
 
 export function TaskList({
-  taskListPromise,
+  taskPagePromise,
 }: {
-  taskListPromise: Promise<TaskPage>;
+  taskPagePromise: Promise<TaskPage>;
 }) {
-  const initial = use(taskListPromise);
+  const initial = use(taskPagePromise);
 
   const [pages, setPages] = useState(initial);
 
   const { data } = pages;
+
+  const { ref, inView, entry } = useInView({
+    /* Optional options */
+    threshold: 0,
+  });
+
+  useEffect(() => {
+    if (!inView) {
+      return;
+    }
+  }, [inView]);
 
   if (data.length === 0) {
     return (
@@ -34,4 +47,22 @@ export function TaskList({
       ))}
     </div>
   );
+}
+
+async function fetchNextPage(cursorId: string, status: Status | null) {
+  const searchParams = new URLSearchParams({
+    cursorId,
+  });
+
+  if (status) {
+    searchParams.set("status", status);
+  }
+
+  const res = await fetch(`/features/dashboard/api?${searchParams}`);
+
+  if (!res.ok) {
+    throw new Error(`${res.status}`);
+  }
+
+  return res.json();
 }

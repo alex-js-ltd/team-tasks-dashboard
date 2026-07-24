@@ -16,3 +16,7 @@ export const SearchParamsSchema = z.object({
 });
 
 export type SearchParams = z.infer<typeof SearchParamsSchema>;
+
+export const TasksApiSearchParamsSchema = SearchParamsSchema.extend({
+  cursorId: z.string().min(1).nullable(),
+});
